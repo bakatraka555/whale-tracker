@@ -79,8 +79,8 @@ else:
 ### CELL 2: Clone Your GitHub Repo
 
 ```python
-# CHANGE THIS to your GitHub repo!
-GITHUB_REPO = "https://github.com/YOUR_USERNAME/whale-tracker.git"
+# Your repo (already set!)
+GITHUB_REPO = "https://github.com/bakatraka555/whale-tracker.git"
 
 !git clone {GITHUB_REPO}
 %cd whale-tracker
