@@ -13,9 +13,9 @@ random.seed(42)
 
 def generate_demo_data():
     print("=" * 60)
-    print("🎮 DEMO DATA GENERATOR")
+    print("DEMO DATA GENERATOR")
     print("=" * 60)
-    print("\n⚡ Creating synthetic whale transactions...")
+    print("\nCreating synthetic whale transactions...")
     print("   (No API keys needed!)\n")
     
     # Configuration
@@ -122,8 +122,8 @@ def generate_demo_data():
     df.to_csv('data/whale_data.csv', index=False)
     
     # Print statistics
-    print(f"✅ Generated {len(df)} transactions\n")
-    print("📊 Dataset Statistics:")
+    print(f"Generated {len(df)} transactions\n")
+    print("Dataset Statistics:")
     print(f"   Date range: {df['date'].min()} to {df['date'].max()}")
     print(f"   UP moves: {len(df[df['label'] == 'UP'])} ({len(df[df['label'] == 'UP'])/len(df)*100:.1f}%)")
     print(f"   DOWN moves: {len(df[df['label'] == 'DOWN'])} ({len(df[df['label'] == 'DOWN'])/len(df)*100:.1f}%)")
@@ -132,7 +132,7 @@ def generate_demo_data():
     print(f"   Avg price change: {df['price_change_24h'].mean():+.2f}%")
     
     # Pattern preview
-    print("\n📋 Pattern Preview:")
+    print("\nPattern Preview:")
     outflow_fear = df[(df['from_exchange'] == 1) & (df['fear_greed'] < 40)]
     if len(outflow_fear) > 0:
         acc = (outflow_fear['label'] == 'UP').sum() / len(outflow_fear) * 100
@@ -143,9 +143,9 @@ def generate_demo_data():
         acc = (inflow_greed['label'] == 'DOWN').sum() / len(inflow_greed) * 100
         print(f"   Inflow + Greed: {acc:.1f}% bearish ({len(inflow_greed)} samples)")
     
-    print("\n💾 Saved to: data/whale_data.csv")
+    print("\nSaved to: data/whale_data.csv")
     print("\n" + "=" * 60)
-    print("✅ DEMO DATA READY!")
+    print("DEMO DATA READY!")
     print("=" * 60)
     print("\nNext steps:")
     print("1. python scripts/analyze_patterns.py")
