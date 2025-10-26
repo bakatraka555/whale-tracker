@@ -1,0 +1,11 @@
+# Etherscan API (Free tier: 5 calls/sec)
+# Get your key at: https://etherscan.io/apis
+ETHERSCAN_API_KEY=YOUR_KEY_HERE
+
+# CoinGecko API (Optional, free tier available)
+# Get your key at: https://www.coingecko.com/en/api
+COINGECKO_API_KEY=YOUR_KEY_HERE
+
+# Alternative.me (No key needed - free)
+# Fear & Greed Index
+
