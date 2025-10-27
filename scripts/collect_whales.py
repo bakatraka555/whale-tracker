@@ -19,7 +19,7 @@ ETHERSCAN_API_KEY = os.getenv('ETHERSCAN_API_KEY', 'YourApiKeyToken')
 COINGECKO_API_KEY = os.getenv('COINGECKO_API_KEY', '')
 
 # Configuration
-WHALE_THRESHOLD_USD = 10_000_000  # $10M+
+WHALE_THRESHOLD_USD = 1_000_000  # $1M+ (more realistic for testing)
 START_DATE = '2024-01-01'
 END_DATE = '2025-01-26'
 
@@ -79,7 +79,7 @@ def get_large_eth_transactions():
     2. Monitor ERC-20 token transfers
     3. Use multiple data sources
     """
-    print("🐋 Collecting whale transactions from Etherscan...")
+    print("Collecting whale transactions from Etherscan...")
     print(f"Threshold: ${WHALE_THRESHOLD_USD:,}")
     print(f"Date range: {START_DATE} to {END_DATE}\n")
     
@@ -89,9 +89,12 @@ def get_large_eth_transactions():
     # In production: Monitor entire blockchain or use Whale Alert API
     
     whale_wallets_to_check = [
-        '0x28c6c06298d514db089934071355e5743bf21d60',  # Binance
+        '0x28c6c06298d514db089934071355e5743bf21d60',  # Binance Hot
         '0xbe0eb53f46cd790cd13851d5eff43d12404d33e8',  # Binance Cold
-        '0x71660c4005ba85c37ccec55d0c4493e66fe775d3',  # Coinbase
+        '0x71660c4005ba85c37ccec55d0c4493e66fe775d3',  # Coinbase 1
+        '0x503828976d22510aad0201ac7ec88293211d23da',  # Coinbase 2
+        '0x267be1c1d684f78cb4f6a176c4911b741e4ffdc0',  # Kraken
+        '0x0548f59fee79f8832c299e01dca5c76f034f558e',  # Bitfinex
     ]
     
     for wallet in tqdm(whale_wallets_to_check, desc="Scanning whale wallets"):
@@ -105,7 +108,7 @@ def get_large_eth_transactions():
                 'startblock': 0,
                 'endblock': 99999999,
                 'page': 1,
-                'offset': 100,  # Last 100 transactions
+                'offset': 1000,  # Last 1000 transactions
                 'sort': 'desc',
                 'apikey': ETHERSCAN_API_KEY
             }
@@ -166,7 +169,7 @@ def get_large_eth_transactions():
                                         'label': label
                                     })
                                     
-                                    print(f"  ✅ Whale: ${value_usd:,.0f} | {from_label} → {to_label} | {label}")
+                                    print(f"  Whale: ${value_usd:,.0f} | {from_label} -> {to_label} | {label}")
                         
                         except Exception as e:
                             continue
@@ -202,7 +205,7 @@ def get_fear_greed_index():
 
 def main():
     print("=" * 60)
-    print("🐋 WHALE DATA COLLECTION - DAY 1")
+    print("WHALE DATA COLLECTION - DAY 1")
     print("=" * 60)
     print()
     
@@ -210,14 +213,14 @@ def main():
     whale_data = get_large_eth_transactions()
     
     if not whale_data:
-        print("\n❌ No whale transactions collected!")
+        print("\nNo whale transactions collected!")
         print("Check your ETHERSCAN_API_KEY in .env file")
         return
     
-    print(f"\n✅ Collected {len(whale_data)} whale transactions!")
+    print(f"\nCollected {len(whale_data)} whale transactions!")
     
     # Step 2: Add Fear & Greed index
-    print("\n📊 Fetching Fear & Greed index...")
+    print("\nFetching Fear & Greed index...")
     fear_greed_data = get_fear_greed_index()
     
     if fear_greed_data:
@@ -233,14 +236,14 @@ def main():
             else:
                 tx['fear_greed'] = 50  # Neutral default
         
-        print(f"✅ Added Fear & Greed data!")
+        print(f"Added Fear & Greed data!")
     
     # Step 3: Save to CSV
     df = pd.DataFrame(whale_data)
     output_file = 'data/whale_data.csv'
     df.to_csv(output_file, index=False)
     
-    print(f"\n💾 Saved to {output_file}")
+    print(f"\nSaved to {output_file}")
     print(f"\nDataset summary:")
     print(f"  Total transactions: {len(df)}")
     print(f"  UP moves: {len(df[df['label'] == 'UP'])} ({len(df[df['label'] == 'UP'])/len(df)*100:.1f}%)")
@@ -250,7 +253,7 @@ def main():
     print(f"  Date range: {df['date'].min()} to {df['date'].max()}")
     
     print("\n" + "=" * 60)
-    print("✅ DATA COLLECTION COMPLETE!")
+    print("DATA COLLECTION COMPLETE!")
     print("=" * 60)
     print("\nNext step: python scripts/analyze_patterns.py")
 
